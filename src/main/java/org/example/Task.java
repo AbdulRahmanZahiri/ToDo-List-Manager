@@ -1,16 +1,12 @@
 package org.example;
 
-public class MyTask {
+public class Task {
     private String description;
-    private boolean isCompleted;
+    private boolean completed;
 
-    public MyTask(String description) {
+    public Task(String description) {
         this.description = description;
-        this.isCompleted = false;
-    }
-
-    public void markAsCompleted() {
-        isCompleted = true;
+        this.completed = false;
     }
 
     public String getDescription() {
@@ -18,11 +14,10 @@ public class MyTask {
     }
 
     public boolean isCompleted() {
-        return isCompleted;
+        return completed;
     }
 
-    @Override
-    public String toString() {
-        return description + " - " + (isCompleted ? "Completed" : "Pending");
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }
