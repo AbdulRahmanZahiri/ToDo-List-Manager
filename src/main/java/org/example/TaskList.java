@@ -1,63 +1,29 @@
-// TaskLinkedList.java
 package org.example;
 
-import java.util.*;
+import org.example.linkedlist.SingleLinkedList;
 
-public class TaskLinkedList {
-    private final Map<String, User> users;
+public class TaskList {
+    private final SingleLinkedList<Task> tasks;
 
-    public TaskLinkedList() {
-        this.users = new HashMap<>();
+    public TaskList() {
+        this.tasks = new SingleLinkedList<>();
     }
 
-    public void addUser(String name) {
-        if (users.containsKey(name)) {
-            System.out.println("⚠️ User already exists.");
-        } else {
-            users.put(name, new User(name));
-            System.out.println("✅ User '" + name + "' created.");
-        }
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
-    public void addTaskToUser(String username, String taskDesc) {
-        User user = users.get(username);
-        if (user != null) {
-            user.addTask(new Task(taskDesc));
-            System.out.println("📌 Task added to " + username);
-        } else {
-            System.out.println("❌ User not found.");
-        }
+    public SingleLinkedList<Task> getAllTasks() {
+        return tasks;
     }
 
-    public void markUserTaskCompleted(String username, String taskDesc) {
-        User user = users.get(username);
-        if (user != null) {
-            boolean success = user.markTaskCompleted(taskDesc);
-            if (success) {
-                System.out.println("✅ Task marked as completed.");
-            } else {
-                System.out.println("❌ Task not found.");
+    public boolean markTaskCompleted(String desc) {
+        for (Task task : tasks) {
+            if (task.getDescription().equalsIgnoreCase(desc)) {
+                task.setCompleted(true);
+                return true;
             }
-        } else {
-            System.out.println("❌ User not found.");
         }
-    }
-
-    public void viewUserTasks(String username) {
-        User user = users.get(username);
-        if (user != null) {
-            List<Task> tasks = user.getTasks();
-            if (tasks.isEmpty()) {
-                System.out.println("⚠️ No tasks found.");
-            } else {
-                int i = 1;
-                for (Task task : tasks) {
-                    String status = task.isCompleted() ? "✅ Completed" : "❌ Not Completed";
-                    System.out.println(i++ + ". " + task.getDescription() + " - " + status);
-                }
-            }
-        } else {
-            System.out.println("❌ User not found.");
-        }
+        return false;
     }
 }
