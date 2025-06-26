@@ -49,6 +49,27 @@ public class SingleLinkedList<T> implements Iterable<T> {
         return head == null;
     }
 
+
+    public boolean removeIf(java.util.function.Predicate<T> predicate) {
+        if (head == null) return false;
+
+        // Check if head needs to be removed
+        if (predicate.test(head.getValue())) {
+            head = head.getNext();
+            return true;
+        }
+
+        Node<T> current = head;
+        while (current.getNext() != null) {
+            if (predicate.test(current.getNext().getValue())) {
+                current.setNext(current.getNext().getNext());
+                return true;
+            }
+            current = current.getNext();
+        }
+        return false;
+    }
+
     /**
      * Allows the list to be used in a for-each loop.
      *

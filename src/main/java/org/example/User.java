@@ -54,4 +54,15 @@ public class User {
     public boolean markTaskCompleted(String desc) {
         return taskList.markTaskCompleted(desc);
     }
+
+    /**
+     * Removes a task from the user's task list by description.
+     *
+     * @param desc the description of the task to remove
+     * @return true if the task was found and removed, false otherwise
+     */
+    public boolean removeTask(String desc) {
+        return taskList.removeTask(desc);
+    }
+
 }

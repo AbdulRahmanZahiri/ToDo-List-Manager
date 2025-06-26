@@ -25,7 +25,10 @@ public class Main {
             System.out.println("2: Add task to user");
             System.out.println("3: Mark task as completed");
             System.out.println("4: View tasks for user");
-            System.out.println("5: Exit");
+            System.out.println("5: Remove user");
+            System.out.println("6: Remove task from user");
+            System.out.println("7: Exit");
+
             System.out.print("Enter your choice: ");
 
             // Read user input
@@ -34,7 +37,6 @@ public class Main {
             // Perform the selected operation
             switch (choice) {
                 case 1 -> {
-                    // Create a new user if the name is unique and capacity allows
                     System.out.print("Enter user name: ");
                     String userName = scanner.nextLine();
                     if (findUser(userName) != null) {
@@ -46,9 +48,7 @@ public class Main {
                         System.out.println("User limit reached.");
                     }
                 }
-
                 case 2 -> {
-                    // Add a new task to the specified user's to-do list
                     System.out.print("Enter user name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter task description: ");
@@ -61,9 +61,7 @@ public class Main {
                         System.out.println("User not found.");
                     }
                 }
-
                 case 3 -> {
-                    // Mark a task as completed for the specified user
                     System.out.print("Enter user name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter task to complete: ");
@@ -75,17 +73,19 @@ public class Main {
                         System.out.println("Task or user not found.");
                     }
                 }
-
                 case 4 -> {
-                    // Display all tasks for the specified user
                     System.out.print("Enter user name: ");
                     String name = scanner.nextLine();
                     User user = findUser(name);
                     if (user != null) {
-                        int i = 1;
-                        for (Task task : user.getTaskList().getAllTasks()) {
-                            String status = task.isCompleted() ? "Completed" : "Not Completed";
-                            System.out.println(i++ + ". " + task.getDescription() + " - " + status);
+                        if (user.getTaskList().getAllTasks().isEmpty()) {
+                            System.out.println("No tasks found for this user.");
+                        } else {
+                            int i = 1;
+                            for (Task task : user.getTaskList().getAllTasks()) {
+                                String status = task.isCompleted() ? "Completed" : "Not Completed";
+                                System.out.println(i++ + ". " + task.getDescription() + " - " + status);
+                            }
                         }
                     } else {
                         System.out.println("User not found.");
@@ -93,15 +93,42 @@ public class Main {
                 }
 
                 case 5 -> {
-                    // Exit the program
+                    System.out.print("Enter user name to remove: ");
+                    String name = scanner.nextLine();
+                    boolean found = false;
+                    for (int i = 0; i < userCount; i++) {
+                        if (users[i].getName().equals(name)) {
+                            // Shift users left
+                            for (int j = i; j < userCount - 1; j++) {
+                                users[j] = users[j + 1];
+                            }
+                            users[--userCount] = null;
+                            found = true;
+                            System.out.println("User removed.");
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("User not found.");
+                    }
+                }
+                case 6 -> {
+                    System.out.print("Enter user name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter task description to remove: ");
+                    String desc = scanner.nextLine();
+                    User user = findUser(name);
+                    if (user != null && user.removeTask(desc)) {
+                        System.out.println("Task removed.");
+                    } else {
+                        System.out.println("Task or user not found.");
+                    }
+                }
+                case 7 -> {
                     System.out.println("Goodbye!");
                     return;
                 }
-
-                default -> {
-                    // Handle invalid menu options
-                    System.out.println("️ Invalid choice.");
-                }
+                default -> System.out.println("️ Invalid choice.");
             }
         }
     }
